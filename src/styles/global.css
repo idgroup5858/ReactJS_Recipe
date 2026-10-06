@@ -1,0 +1,655 @@
+@import "tailwindcss";
+
+/* `dark:` classes follow <html class="dark"> (the theme switch), not the OS setting */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* Design tokens are taken one-to-one from hr-ui (FaceID_HR_System/hr-ui/app/globals.css) */
+@theme {
+  --font-sans: "Inter Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+
+  /* Deep burgundy accent on light neutral surfaces */
+  --color-brand-50: #fbf3f5;
+  --color-brand-100: #f5e4e9;
+  --color-brand-200: #e9c3ce;
+  --color-brand-300: #d394a5;
+  --color-brand-400: #b45c74;
+  --color-brand-500: #93304c;
+  --color-brand-600: #7c1b39;
+  --color-brand-700: #6b0f2a;
+  --color-brand-800: #560b22;
+  --color-brand-900: #3d0717;
+  /* solid burgundy fills (buttons, avatars); brand-700 doubles as the accent text color */
+  --color-brand-fill: #6b0f2a;
+  --color-brand-fill-hover: #560b22;
+
+  --color-page: #efefef;
+  /* cards, inputs, header and sidebar */
+  --color-surface: #fff;
+
+  /* One small corner radius for cards, inputs, buttons and dialogs (rounded-full stays round) */
+  --radius: 3px;
+  --radius-xs: 3px;
+  --radius-sm: 3px;
+  --radius-md: 3px;
+  --radius-lg: 3px;
+  --radius-xl: 3px;
+  --radius-2xl: 3px;
+}
+
+/* Banner gradient of the default burgundy accent */
+:root {
+  --hero-from: #4a0a1d;
+  --hero-to: #6b0f2a;
+}
+
+/* ───────────────────────── Dark theme ─────────────────────────
+   <html class="dark"> is set before the first paint by the inline script (src/theme/themeInit.ts) and toggled by
+   src/theme/appearance.ts. Components keep their light-theme classes; the palettes are remapped here:
+   - neutral scale is inverted (text-neutral-900 turns light, bg-neutral-50 becomes a dark fill);
+   - status colors: 50–200 become translucent tints, 700 (used for text) the bright 400 tone;
+   - brand 50–300 become translucent tints and 700–900 light text tones; solid fills use --color-brand-fill;
+   - bg-white surfaces become dark cards (see the utilities layer at the end of this file). */
+.dark {
+  color-scheme: dark;
+
+  --color-page: #0f0f0f;
+  --color-surface: #181818;
+
+  --color-neutral-50: #1f1f1f;
+  --color-neutral-100: #262626;
+  --color-neutral-200: #2e2e2e;
+  --color-neutral-300: #3d3d3d;
+  --color-neutral-400: #6f6f6f;
+  --color-neutral-500: #9b9b9b;
+  --color-neutral-600: #b4b4b4;
+  --color-neutral-700: #cdcdcd;
+  --color-neutral-800: #e1e1e1;
+  --color-neutral-900: #eeeeee;
+  --color-neutral-950: #f8f8f8;
+
+  --color-brand-50: rgb(229 142 166 / 0.1);
+  --color-brand-100: rgb(229 142 166 / 0.16);
+  --color-brand-200: rgb(229 142 166 / 0.28);
+  --color-brand-300: rgb(229 142 166 / 0.45);
+  --color-brand-400: #c86d87;
+  --color-brand-500: #d77c95;
+  --color-brand-600: #df859d;
+  --color-brand-700: #e58ea6;
+  --color-brand-800: #eca5b8;
+  --color-brand-900: #f4c7d3;
+  --color-brand-fill: #8f2246;
+  --color-brand-fill-hover: #a32d53;
+
+  --color-red-50: rgb(248 113 113 / 0.1);
+  --color-red-100: rgb(248 113 113 / 0.16);
+  --color-red-200: rgb(248 113 113 / 0.3);
+  --color-red-700: #f87171;
+  --color-emerald-50: rgb(52 211 153 / 0.1);
+  --color-emerald-100: rgb(52 211 153 / 0.16);
+  --color-emerald-200: rgb(52 211 153 / 0.3);
+  --color-emerald-700: #34d399;
+  --color-amber-50: rgb(251 191 36 / 0.1);
+  --color-amber-100: rgb(251 191 36 / 0.16);
+  --color-amber-200: rgb(251 191 36 / 0.3);
+  --color-amber-700: #fbbf24;
+  --color-sky-50: rgb(56 189 248 / 0.1);
+  --color-sky-100: rgb(56 189 248 / 0.16);
+  --color-sky-200: rgb(56 189 248 / 0.3);
+  --color-sky-700: #38bdf8;
+}
+
+/* ───────────────────────── Accent color ─────────────────────────
+   Sozlamalar → Asosiy rang puts data-accent and --accent / --accent-ink / --accent-fill-dark on <html>
+   (src/theme/appearance.ts, and the inline script on load). The brand-* scale is derived from them here,
+   with the same mixing ratios as the hand-tuned burgundy palette above. Without data-accent: burgundy. */
+html[data-accent] {
+  --color-brand-50: color-mix(in srgb, var(--accent) 5%, #fff);
+  --color-brand-100: color-mix(in srgb, var(--accent) 11%, #fff);
+  --color-brand-200: color-mix(in srgb, var(--accent) 24%, #fff);
+  --color-brand-300: color-mix(in srgb, var(--accent) 43%, #fff);
+  --color-brand-400: color-mix(in srgb, var(--accent) 66%, #fff);
+  --color-brand-500: color-mix(in srgb, var(--accent) 85%, #fff);
+  --color-brand-600: color-mix(in srgb, var(--accent) 94%, #fff);
+  --color-brand-700: var(--accent);
+  --color-brand-800: color-mix(in srgb, var(--accent) 80%, #000);
+  --color-brand-900: color-mix(in srgb, var(--accent) 56%, #000);
+  --color-brand-fill: var(--accent);
+  --color-brand-fill-hover: color-mix(in srgb, var(--accent) 80%, #000);
+  --hero-from: color-mix(in srgb, var(--accent) 70%, #000);
+  --hero-to: var(--accent);
+}
+/* dark theme: translucent tints and light text tones from --accent-ink */
+.dark[data-accent] {
+  --color-brand-50: color-mix(in srgb, var(--accent-ink) 10%, transparent);
+  --color-brand-100: color-mix(in srgb, var(--accent-ink) 16%, transparent);
+  --color-brand-200: color-mix(in srgb, var(--accent-ink) 28%, transparent);
+  --color-brand-300: color-mix(in srgb, var(--accent-ink) 45%, transparent);
+  --color-brand-400: color-mix(in srgb, var(--accent-ink) 70%, var(--accent));
+  --color-brand-500: color-mix(in srgb, var(--accent-ink) 82%, var(--accent));
+  --color-brand-600: color-mix(in srgb, var(--accent-ink) 92%, var(--accent));
+  --color-brand-700: var(--accent-ink);
+  --color-brand-800: color-mix(in srgb, var(--accent-ink) 75%, #fff);
+  --color-brand-900: color-mix(in srgb, var(--accent-ink) 50%, #fff);
+  --color-brand-fill: var(--accent-fill-dark, var(--accent));
+  --color-brand-fill-hover: color-mix(in srgb, var(--accent-fill-dark, var(--accent)) 85%, #fff);
+}
+
+/* Accent-colored banner with faint diagonal lines */
+@utility bg-hero {
+  background-color: var(--hero-from);
+  background-image:
+    repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 14px),
+    linear-gradient(90deg, var(--hero-from) 0%, var(--hero-to) 100%);
+}
+
+@layer base {
+  html {
+    color-scheme: light;
+  }
+
+  /* Tailwind v4 defaults borders to currentColor; keep plain `border` a soft hairline */
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-neutral-200);
+  }
+
+  body {
+    @apply bg-page font-sans text-neutral-900 antialiased;
+  }
+
+  ::selection {
+    @apply bg-brand-100 text-brand-900;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-neutral-400;
+  }
+
+  input[type="checkbox"],
+  input[type="radio"],
+  input[type="range"] {
+    accent-color: var(--color-brand-700);
+  }
+
+  input:focus,
+  textarea:focus,
+  select:focus {
+    outline: none;
+  }
+  input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]):focus-visible,
+  textarea:focus-visible,
+  select:focus-visible {
+    border-color: var(--color-brand-700);
+    box-shadow: none;
+  }
+  input,
+  textarea {
+    caret-color: var(--color-brand-700);
+  }
+  /* the search field draws its own clear (✕) button */
+  input[type="search"]::-webkit-search-cancel-button {
+    -webkit-appearance: none;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-neutral-300) transparent;
+  }
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  *::-webkit-scrollbar-thumb {
+    @apply rounded-full bg-neutral-300;
+  }
+  *::-webkit-scrollbar-thumb:hover {
+    @apply bg-neutral-400;
+  }
+}
+
+/* ───────────────────────── Code blocks ─────────────────────────
+   Token colors are the Android app's CodeColors (One Light / One Dark). Font size, line wrapping and line numbers
+   are driven by --code-font-size, data-code-wrap and data-line-numbers on <html> (src/theme/appearance.ts),
+   so changing a setting restyles every block without re-rendering React. */
+:root {
+  --code-font-size: 14px;
+  --code-bg: #f7f8fa;
+  --code-gutter: #a0a7b4;
+  --code-plain: #383a42;
+  --code-keyword: #a626a4;
+  --code-declaration: #0184bc;
+  --code-type: #c18401;
+  --code-function: #4078f2;
+  --code-string: #50a14f;
+  --code-number: #986801;
+  --code-comment: #8a919e;
+  --code-punctuation: #5c6370;
+  --code-decorator: #e45649;
+  --code-output: #2e6b2e;
+  --code-output-bg: #edeff3;
+}
+.dark {
+  --code-bg: #21252e;
+  --code-gutter: #5c6370;
+  --code-plain: #d7dae0;
+  --code-keyword: #c678dd;
+  --code-declaration: #56b6c2;
+  --code-type: #e5c07b;
+  --code-function: #61afef;
+  --code-string: #98c379;
+  --code-number: #d19a66;
+  --code-comment: #7f848e;
+  --code-punctuation: #abb2bf;
+  --code-decorator: #e06c75;
+  --code-output: #b8e0a0;
+  --code-output-bg: #1a1d24;
+}
+
+@layer components {
+  .code-block {
+    background: var(--code-bg);
+    color: var(--code-plain);
+    font-family: var(--font-mono);
+    font-size: var(--code-font-size);
+    line-height: 1.45;
+  }
+  .code-scroll {
+    overflow-x: auto;
+    padding: 0.75rem 0;
+  }
+  /* no wrapping: rows are as wide as the longest line and the gutter stays pinned while the code scrolls */
+  .code-rows {
+    width: max-content;
+    min-width: 100%;
+  }
+  .code-row {
+    display: flex;
+  }
+  .code-gutter {
+    position: sticky;
+    left: 0;
+    flex: none;
+    min-width: calc(var(--gutter-digits, 2) * 1ch + 1.25rem);
+    padding: 0 0.75rem 0 0.5rem;
+    background: var(--code-bg);
+    color: var(--code-gutter);
+    text-align: right;
+    user-select: none;
+  }
+  .code-line {
+    flex: 1 1 auto;
+    padding-right: 1rem;
+    white-space: pre;
+  }
+  /* empty lines keep their height (a pseudo-element is not copied with the selection) */
+  .code-line:empty::before {
+    content: " ";
+  }
+  html:not([data-line-numbers]) .code-gutter {
+    display: none;
+  }
+  html:not([data-line-numbers]) .code-line {
+    padding-left: 1rem;
+  }
+  html[data-code-wrap] .code-rows {
+    width: 100%;
+  }
+  html[data-code-wrap] .code-line {
+    min-width: 0;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .code-output {
+    background: var(--code-output-bg);
+    color: var(--code-output);
+    font-family: var(--font-mono);
+    font-size: var(--code-font-size);
+    line-height: 1.45;
+    white-space: pre-wrap;
+    overflow-wrap: anywhere;
+  }
+
+  .tok-keyword { color: var(--code-keyword); }
+  .tok-declaration { color: var(--code-declaration); }
+  .tok-type { color: var(--code-type); }
+  .tok-function { color: var(--code-function); }
+  .tok-string { color: var(--code-string); }
+  .tok-number { color: var(--code-number); }
+  .tok-comment { color: var(--code-comment); font-style: italic; }
+  .tok-punctuation { color: var(--code-punctuation); }
+  .tok-decorator { color: var(--code-decorator); }
+
+  .page-enter {
+    animation: page-enter 0.18s ease-out;
+  }
+}
+
+@keyframes page-enter {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .page-enter {
+    animation: none;
+  }
+}
+
+/* ───────────────────────── SweetAlert2 ─────────────────────────
+   Dialogs get the same anatomy as the app's own modals: header (icon · uppercase title · ✕ with a
+   hairline under it) → body → full-width actions. Toasts keep SweetAlert's compact row layout.
+   Unlayered, multi-class selectors: SweetAlert injects its own CSS at runtime. */
+.swal2-container {
+  --swal2-width: 26rem;
+  --swal2-padding: 0;
+  --swal2-border-radius: 3px;
+  --swal2-backdrop: rgba(0, 0, 0, 0.4);
+  --swal2-icon-animations: false;
+  --swal2-show-animation: none;
+  --swal2-hide-animation: none;
+  --swal2-toast-show-animation: none;
+  --swal2-toast-hide-animation: none;
+  --swal2-timer-progress-bar-background: var(--color-brand-700);
+}
+.swal2-container .swal2-popup {
+  border: 1px solid var(--color-neutral-200);
+  background: var(--color-surface) !important;
+  color: var(--color-neutral-900) !important;
+}
+
+.swal2-container .swal2-popup.swal2-modal {
+  --swal2-icon-zoom: 0.36;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  overflow: hidden;
+  text-align: left;
+  box-shadow: 0 24px 60px -24px rgba(0, 0, 0, 0.35);
+}
+.swal2-container .swal2-popup.swal2-modal > * {
+  grid-column: 1 / -1;
+}
+
+/* Header row */
+.swal2-container .swal2-popup.swal2-modal::before {
+  content: "";
+  grid-column: 1 / -1;
+  grid-row: 1;
+  border-bottom: 1px solid var(--color-neutral-200);
+  pointer-events: none;
+}
+.swal2-container .swal2-popup.swal2-modal > .swal2-icon {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: center;
+  margin: 0 0 0 calc(1.25rem / var(--swal2-icon-zoom));
+}
+.swal2-container .swal2-popup.swal2-modal > .swal2-title {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: center;
+  margin: 0;
+  padding: 1.05rem 0.75rem;
+  color: var(--color-brand-800);
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.35;
+  letter-spacing: 0.14em;
+  text-align: left;
+  text-transform: uppercase;
+}
+.swal2-container .swal2-popup.swal2-modal:not([class*="swal2-icon-"]) > .swal2-title {
+  padding-left: 1.5rem;
+}
+.swal2-container .swal2-popup.swal2-modal > .swal2-close {
+  grid-column: 3;
+  grid-row: 1;
+  align-self: center;
+  justify-self: end;
+  width: 2rem;
+  height: 2rem;
+  margin: 0 0.75rem 0 0;
+  border-radius: 3px;
+  color: var(--color-neutral-400);
+  font-size: 1rem;
+}
+.swal2-container .swal2-popup.swal2-modal > .swal2-close:hover {
+  background: var(--color-neutral-100);
+  color: var(--color-neutral-900);
+}
+.swal2-container .swal2-close:focus-visible {
+  outline: none;
+  box-shadow: none;
+  background: var(--color-neutral-100);
+}
+.swal2-container .swal2-actions > button:focus-visible {
+  outline: 1px solid var(--color-brand-400) !important;
+  outline-offset: 1px;
+  box-shadow: none !important;
+}
+
+/* Body */
+.swal2-container .swal2-popup.swal2-modal > .swal2-html-container {
+  margin: 0;
+  padding: 1.25rem 1.5rem 0;
+  color: var(--color-neutral-600);
+  font-size: 0.875rem;
+  line-height: 1.55;
+  text-align: left;
+}
+
+/* Actions */
+.swal2-container .swal2-popup.swal2-modal > .swal2-actions {
+  flex-wrap: nowrap;
+  justify-content: stretch;
+  gap: 0.5rem;
+  width: auto;
+  margin: 0;
+  padding: 1.25rem 1.5rem 1.5rem;
+}
+.swal2-container .swal2-popup.swal2-modal > .swal2-actions > button {
+  flex: 1 1 0;
+  margin: 0;
+}
+.swal2-container .swal2-styled {
+  @apply inline-flex h-9 items-center justify-center rounded px-5 py-0 text-xs font-semibold uppercase tracking-[0.12em];
+  box-shadow: none !important;
+}
+.swal2-container .swal2-styled.swal2-confirm {
+  color: #fff;
+  background-color: var(--color-brand-fill) !important;
+  border: 1px solid var(--color-brand-fill);
+}
+.swal2-container .swal2-styled.swal2-confirm:hover {
+  background-color: var(--color-brand-fill-hover) !important;
+  background-image: none;
+}
+.swal2-container .swal2-styled.swal2-cancel,
+.swal2-container .swal2-styled.swal2-deny {
+  color: var(--color-neutral-700);
+  background-color: var(--color-surface) !important;
+  border: 1px solid var(--color-neutral-300);
+}
+.swal2-container .swal2-styled.swal2-cancel:hover,
+.swal2-container .swal2-styled.swal2-deny:hover {
+  background-color: var(--color-neutral-50) !important;
+  background-image: none;
+  border-color: var(--color-neutral-400);
+}
+
+/* Toasts (corner notifications) */
+.swal2-container .swal2-popup.swal2-toast {
+  border-radius: 3px;
+  box-shadow: 0 12px 32px -16px rgba(0, 0, 0, 0.3);
+}
+.swal2-container .swal2-popup.swal2-toast .swal2-title {
+  color: var(--color-neutral-900);
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+
+/* Muted status icons that match the burgundy palette */
+.swal2-container .swal2-icon.swal2-success {
+  border-color: var(--color-emerald-700);
+  color: var(--color-emerald-700);
+}
+.swal2-container .swal2-icon.swal2-success [class^="swal2-success-line"] {
+  background-color: var(--color-emerald-700);
+}
+.swal2-container .swal2-icon.swal2-success .swal2-success-ring {
+  border-color: var(--color-emerald-200);
+}
+.swal2-container .swal2-icon.swal2-error {
+  border-color: var(--color-red-700);
+  color: var(--color-red-700);
+}
+.swal2-container .swal2-icon.swal2-error [class^="swal2-x-mark-line"] {
+  background-color: var(--color-red-700);
+}
+.swal2-container .swal2-icon.swal2-warning {
+  border-color: var(--color-amber-500);
+  color: var(--color-amber-700);
+}
+.swal2-container .swal2-icon.swal2-info,
+.swal2-container .swal2-icon.swal2-question {
+  border-color: var(--color-brand-300);
+  color: var(--color-brand-700);
+}
+
+/* ───────────────────────── Buttons ─────────────────────────
+   Color / border / state only — size, padding, radius and layout stay on the element. */
+@utility btn-primary {
+  color: #fff;
+  cursor: pointer;
+  background-color: var(--color-brand-fill);
+  border: 1px solid var(--color-brand-fill);
+  transition: background-color 0.15s ease, border-color 0.15s ease, opacity 0.15s ease;
+  &:hover:not(:disabled) {
+    background-color: var(--color-brand-fill-hover);
+    border-color: var(--color-brand-fill-hover);
+  }
+  &:focus-visible {
+    outline: 1px solid var(--color-brand-400);
+    outline-offset: 1px;
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+/* Burgundy outline, e.g. secondary call to action */
+@utility btn-outline {
+  color: var(--color-brand-700);
+  cursor: pointer;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-brand-700);
+  transition: background-color 0.15s ease, color 0.15s ease;
+  &:hover:not(:disabled) {
+    background-color: var(--color-brand-50);
+  }
+  &:focus-visible {
+    outline: 1px solid var(--color-brand-400);
+    outline-offset: 1px;
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@utility btn-ghost {
+  color: var(--color-neutral-700);
+  cursor: pointer;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-neutral-300);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  &:hover:not(:disabled) {
+    color: var(--color-neutral-900);
+    background-color: var(--color-neutral-50);
+    border-color: var(--color-neutral-400);
+  }
+  &:focus-visible {
+    outline: 1px solid var(--color-brand-400);
+    outline-offset: 1px;
+  }
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+@utility btn-icon {
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-neutral-200);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  &:hover:not(:disabled) {
+    color: var(--color-brand-700);
+    background-color: var(--color-brand-50);
+    border-color: var(--color-brand-200);
+  }
+  &:focus-visible {
+    outline: 1px solid var(--color-brand-400);
+    outline-offset: 1px;
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+@utility btn-icon-danger {
+  color: var(--color-neutral-500);
+  cursor: pointer;
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-neutral-200);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+  &:hover:not(:disabled) {
+    color: var(--color-red-700);
+    background-color: var(--color-red-50);
+    border-color: var(--color-red-200);
+  }
+  &:focus-visible {
+    outline: 1px solid #e3807a;
+    outline-offset: 1px;
+  }
+  &:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+  }
+}
+
+/* Dark theme, class level. Same layer and specificity as the utilities they replace, placed after them,
+   so variants such as hover:bg-neutral-50 still win where they apply. */
+@layer utilities {
+  /* white cards, inputs, header and sidebar become the dark surface */
+  :where(.dark) .bg-white {
+    background-color: var(--color-surface);
+  }
+  /* toggle-switch knobs (small round white dots) stay light on their track */
+  :where(.dark) .rounded-full.bg-white {
+    background-color: #e5e5e5;
+  }
+  /* solid burgundy fills keep a deep tone (brand-700 itself turns into the rose text color) */
+  :where(.dark) .bg-brand-700 {
+    background-color: var(--color-brand-fill);
+  }
+  :where(.dark) .border-brand-700 {
+    border-color: var(--color-brand-fill);
+  }
+}
