@@ -21,6 +21,8 @@ export interface AppSettings {
   selectedLanguageId: string
   /** tablar panelida ko'rinadigan tillar (kamida bittasi doim yoqilgan) */
   enabledLanguageIds: string[]
+  /** foydalanuvchi ko'rgan tayyor tillar — yangi til qo'shilsa, u avtomatik yoqiladi */
+  seenLanguageIds: string[]
 }
 
 /**
@@ -42,11 +44,19 @@ function sanitize(raw: unknown): AppSettings {
     ? [...new Set(value.enabledLanguageIds.filter((id): id is string => typeof id === 'string'))]
     : []
   let selected = typeof value.selectedLanguageId === 'string' ? value.selectedLanguageId : ''
+  // `null` — eski sozlamalar (maydon bo'lmagan): barcha tayyor tillar yangi hisoblanadi
+  let seen = Array.isArray(value.seenLanguageIds)
+    ? value.seenLanguageIds.filter((id): id is string => typeof id === 'string')
+    : null
   if (availableLanguageIds.length > 0) {
     enabled = enabled.filter((id) => availableLanguageIds.includes(id))
-    // birinchi kirishda barcha tayyor tillar ko'rinsin — til menyusida NestJS va Next.js ham darhol chiqadi
+    // yangi qo'shilgan til (oldin ko'rilmagan) avtomatik yoqiladi — kontent qo'shilganda til menyusida darhol chiqadi
+    const seenIds = seen // closure ichida narrowing saqlanishi uchun const nusxa
+    const newlyAvailable = seenIds === null ? availableLanguageIds : availableLanguageIds.filter((id) => !seenIds.includes(id))
+    for (const id of newlyAvailable) if (!enabled.includes(id)) enabled.push(id)
     if (enabled.length === 0) enabled = [...availableLanguageIds]
     if (!enabled.includes(selected)) selected = enabled[0]
+    seen = [...availableLanguageIds]
   }
 
   return {
@@ -57,6 +67,7 @@ function sanitize(raw: unknown): AppSettings {
     showLineNumbers: value.showLineNumbers !== false,
     selectedLanguageId: selected,
     enabledLanguageIds: enabled,
+    seenLanguageIds: seen ?? [],
   }
 }
 
@@ -73,6 +84,8 @@ export function useSettings(): AppSettings {
 export function configureLanguages(availableIds: string[]): void {
   availableLanguageIds = availableIds
   settingsStore.set(sanitize(settingsStore.get()))
+  // ko'rilgan tillar ro'yxati saqlanadi — keyingi safar faqat haqiqatan yangi til avtomatik yoqiladi
+  writeJson(SETTINGS_STORAGE_KEY, settingsStore.get())
 }
 
 function save(transform: (current: AppSettings) => AppSettings): void {

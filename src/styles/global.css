@@ -288,6 +288,7 @@ html[data-accent] {
     flex: 1 1 auto;
     padding-right: 1rem;
     white-space: pre;
+    tab-size: 4; /* Go kodidagi tablar (gofmt) 4 ta bo'shliq kabi ko'rinadi */
   }
   /* empty lines keep their height (a pseudo-element is not copied with the selection) */
   .code-line:empty::before {

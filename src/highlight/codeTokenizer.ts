@@ -71,6 +71,14 @@ export function tokenize(code: string, rules: SyntaxRules): Token[] {
 
   const isPrecededByIdentifier = (index: number) => index > 0 && isIdentifierPart(code[index - 1])
 
+  /** `index` dan oldin (bo'shliqlarni hisobga olmay) aynan `word` so'zi turadimi — `new Date(` ni aniqlash uchun. */
+  const isPrecededByWord = (index: number, word: string): boolean => {
+    let end = index
+    while (end > 0 && code[end - 1] === ' ') end--
+    const start = end - word.length
+    return start >= 0 && code.slice(start, end) === word && (start === 0 || !isIdentifierPart(code[start - 1]))
+  }
+
   const scanIdentifier = (start: number, limit: number): number => {
     let i = start
     while (i < limit && isIdentifierPart(code[i])) i++
@@ -87,8 +95,9 @@ export function tokenize(code: string, rules: SyntaxRules): Token[] {
     if (rules.declarations.has(word)) return 'declaration'
     if (rules.keywords.has(word)) return 'keyword'
     if (rules.builtinTypes.has(word)) return 'type'
-    if (isUpperCase(word[0])) return 'type'
-    return isCall ? 'function' : null
+    // `Add(1, 2)` yoki `func Add(` — chaqiriladigan nom funksiya (katta harfli bo'lsa ham); `new Date(` esa tip bo'lib qoladi
+    if (isCall && !isPrecededByWord(start, 'new')) return 'function'
+    return isUpperCase(word[0]) ? 'type' : null
   }
 
   const scanString = (start: number, limit: number, quote: string): number => {
@@ -101,6 +110,12 @@ export function tokenize(code: string, rules: SyntaxRules): Token[] {
       else i++
     }
     return limit
+  }
+
+  /** Go dagi `raw string` kabi: ichida escape yo'q, bir nechta qatorga cho'zilishi mumkin, yopuvchi belgigacha hammasi satr. */
+  const scanRawString = (start: number, limit: number, delimiter: string): number => {
+    const close = code.indexOf(delimiter, start + 1)
+    return close === -1 || close >= limit ? limit : close + 1
   }
 
   const canStartRegex = (index: number): boolean => {
@@ -202,6 +217,8 @@ export function tokenize(code: string, rules: SyntaxRules): Token[] {
         next = emit(i, scanString(i, to, char), 'string')
       } else if (char === '/' && rules.regexLiterals && canStartRegex(i)) {
         next = emit(i, scanRegex(i, to), 'string')
+      } else if (rules.rawStringDelimiter !== null && char === rules.rawStringDelimiter) {
+        next = emit(i, scanRawString(i, to, rules.rawStringDelimiter), 'string')
       } else if (char === rules.templateDelimiter) {
         next = scanTemplate(i, to)
       } else if (isDigit(char) || (char === '.' && i + 1 < to && isDigit(code[i + 1]) && !isPrecededByIdentifier(i))) {

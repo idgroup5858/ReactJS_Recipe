@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# kontent tayyorlash uchun vaqtinchalik fayllar (scripts/content.mjs import)
+.content-staging

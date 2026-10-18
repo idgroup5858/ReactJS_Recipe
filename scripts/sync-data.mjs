@@ -9,6 +9,16 @@ import { execSync } from 'node:child_process'
 import { cpSync, existsSync, readdirSync, rmSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 
+// DIQQAT: kontent endi to'g'ridan-to'g'ri public/data da tahrirlanadi (scripts/content.mjs) va Android loyihasidan ancha oldinga ketgan.
+// Sinxronlash public/data ni butunlay o'chirib, Android versiyasi bilan almashtiradi — shuning uchun faqat --force bilan ishlaydi.
+if (!process.argv.includes('--force')) {
+  console.error(
+    "To'xtatildi: public/data Android loyihasidan ko'ra yangiroq (JavaScript, Go va kengaytirilgan nazariya faqat shu yerda).\n" +
+      "Sinxronlash bu kontentni o'chirib yuboradi. Baribir davom etish uchun: npm run sync:data -- --force",
+  )
+  process.exit(1)
+}
+
 const androidDir = resolve(process.env.ANDROID_RECIPE_DIR ?? 'C:/Users/iD_GROUP/AndroidStudioProjects/Recipe')
 const exportDir = join(androidDir, 'app', 'build', 'web-export')
 const targetDir = resolve(import.meta.dirname, '..', 'public', 'data')
