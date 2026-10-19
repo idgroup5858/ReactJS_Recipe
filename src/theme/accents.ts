@@ -1,12 +1,21 @@
-export type Accent = {
-  id: string
-  name: string
+/** Aksent ranglari — sozlamalardagi palitra ham, tillarning o'z ranglari (languageAccents.ts) ham shu ko'rinishda. */
+export type AccentColors = {
   /** asosiy tus: yorug' rejimda tugmalar, aksent matn va faol holatlar (ustidagi oq matn o'qilishi kerak) */
   color: string
   /** qorong'i rejimdagi aksent matn uchun och tus */
   ink: string
   /** `color` qorong'i fonda ajralib turmasa, qorong'i rejimdagi tugma rangi */
   fillDark?: string
+  /** bosh sahifa banneri gradienti; berilmasa global.css uni `color` dan hosil qiladi */
+  heroFrom?: string
+  heroTo?: string
+  /** banner matni (standart — oq), masalan sariq JavaScript bannerida qora */
+  heroFg?: string
+}
+
+export type Accent = AccentColors & {
+  id: string
+  name: string
 }
 
 export const DEFAULT_ACCENT_ID = 'bordo'
@@ -35,10 +44,13 @@ export const ACCENTS: Accent[] = [
 ]
 
 /** Standart bo'lmagan rang tanlanganda <html> ga (data-accent bilan birga) qo'yiladigan CSS o'zgaruvchilari. */
-export const ACCENT_VAR_NAMES = ['--accent', '--accent-ink', '--accent-fill-dark']
+export const ACCENT_VAR_NAMES = ['--accent', '--accent-ink', '--accent-fill-dark', '--hero-from', '--hero-to', '--hero-fg']
 
-export function accentVars(accent: Accent): Record<string, string> {
+export function accentVars(accent: AccentColors): Record<string, string> {
   const vars: Record<string, string> = { '--accent': accent.color, '--accent-ink': accent.ink }
   if (accent.fillDark) vars['--accent-fill-dark'] = accent.fillDark
+  if (accent.heroFrom) vars['--hero-from'] = accent.heroFrom
+  if (accent.heroTo) vars['--hero-to'] = accent.heroTo
+  if (accent.heroFg) vars['--hero-fg'] = accent.heroFg
   return vars
 }

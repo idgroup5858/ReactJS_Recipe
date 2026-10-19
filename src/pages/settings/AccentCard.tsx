@@ -1,14 +1,24 @@
 import { Check } from 'lucide-react'
+import { useContentIndex } from '@/app/routeData'
 import { Card, CardHeader } from '@/components/ui/Card'
-import { setAccent, useSettings } from '@/store/settingsStore'
+import LanguageLogo from '@/components/ui/LanguageLogo'
+import Switch from '@/components/ui/Switch'
+import { setAccent, setLanguageAccent, useSettings } from '@/store/settingsStore'
 import { ACCENTS, DEFAULT_ACCENT_ID } from '@/theme/accents'
+import { getLanguageAccent } from '@/theme/languageAccents'
 import { useIsDark } from '@/theme/useIsDark'
 
-/** Asosiy rang — hr-ui sozlamalaridagi 16 xil palitra. */
+/**
+ * Asosiy rang: standart bo'yicha tanlangan tilning o'z rangi (TypeScript — ko'k, NestJS — qizil...), o'chirilsa
+ * hr-ui sozlamalaridagi 16 xil palitradan biri. Palitradan rang tanlash til rangini o'chiradi.
+ */
 export default function AccentCard() {
-  const { accentId } = useSettings()
+  const { accentId, languageAccent, selectedLanguageId } = useSettings()
+  const language = useContentIndex().language(selectedLanguageId)
   const dark = useIsDark()
-  const accentName = ACCENTS.find((accent) => accent.id === accentId)?.name
+  // ro'yxatda rangi yo'q til palitradagi rangda ko'rinadi (theme/appearance.ts)
+  const followsLanguage = languageAccent && getLanguageAccent(selectedLanguageId) !== undefined
+  const accentName = followsLanguage ? language?.name : ACCENTS.find((accent) => accent.id === accentId)?.name
 
   return (
     <Card>
@@ -17,9 +27,17 @@ export default function AccentCard() {
         hint="Tugmalar, sarlavhalar va faol bo'limlar rangi"
         actions={<span className="text-xs font-semibold text-brand-700">{accentName}</span>}
       />
+      <div className="flex items-center gap-3 border-b border-neutral-200 px-4 py-3">
+        {language && <LanguageLogo language={language} size={24} />}
+        <span className="min-w-0 flex-1">
+          <span className="block text-sm text-neutral-800">Tanlangan til rangi</span>
+          <span className="block text-xs text-neutral-500">Til almashtirilganda banner va asosiy rang ham o'sha tilga moslashadi</span>
+        </span>
+        <Switch checked={languageAccent} onChange={setLanguageAccent} label="Tanlangan til rangi" />
+      </div>
       <div className="grid grid-cols-4 gap-1.5 p-4 sm:grid-cols-8" role="radiogroup" aria-label="Asosiy rang">
         {ACCENTS.map((accent) => {
-          const active = accentId === accent.id
+          const active = !followsLanguage && accentId === accent.id
           return (
             <button
               key={accent.id}

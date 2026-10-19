@@ -3,8 +3,9 @@
 Android ilovasi **Kod retseptlari** (`AndroidStudioProjects/Recipe`) ning veb-nusxasi:
 
 - **Kontent** — Kotlin ilovadan bir-ga-bir eksport qilinadi (TypeScript, NestJS, Next.js: 47 bo'lim, 182 mavzu, 9 123 misol);
-- **Dizayn** — `FaceID_HR_System/hr-ui` uslubida: bordo aksent, 3px burchaklar, chap sidebar + sticky header,
-  qorong'i rejim va 16 xil asosiy rang.
+- **Dizayn** — `FaceID_HR_System/hr-ui` uslubida: 3px burchaklar, chap sidebar + sticky header, qorong'i rejim.
+  Asosiy rang tanlangan tilga moslashadi (TypeScript — ko'k, NestJS — qizil, JavaScript — sariq-qora...,
+  `src/theme/languageAccents.ts`); sozlamalarda o'chirib, 16 xil palitradan birini tanlash mumkin.
 
 Stek: React 19, Vite 8, TypeScript 6, Tailwind CSS 4, react-router 8, lucide-react, SweetAlert2.
 

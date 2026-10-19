@@ -37,10 +37,12 @@
   --radius-2xl: 3px;
 }
 
-/* Banner gradient of the default burgundy accent */
+/* Banner gradient and text of the default burgundy accent. Language accents (src/theme/languageAccents.ts) may set
+   --hero-from / --hero-to / --hero-fg inline on <html>, which wins over the rules below. */
 :root {
   --hero-from: #4a0a1d;
   --hero-to: #6b0f2a;
+  --hero-fg: #fff;
 }
 
 /* ───────────────────────── Dark theme ─────────────────────────
@@ -100,9 +102,10 @@
 }
 
 /* ───────────────────────── Accent color ─────────────────────────
-   Sozlamalar → Asosiy rang puts data-accent and --accent / --accent-ink / --accent-fill-dark on <html>
-   (src/theme/appearance.ts, and the inline script on load). The brand-* scale is derived from them here,
-   with the same mixing ratios as the hand-tuned burgundy palette above. Without data-accent: burgundy. */
+   The open language's own colors (src/theme/languageAccents.ts) or the color picked in Sozlamalar → Asosiy rang
+   put data-accent and --accent / --accent-ink / --accent-fill-dark on <html> (src/theme/appearance.ts, and the
+   inline script on load). The brand-* scale is derived from them here, with the same mixing ratios as the
+   hand-tuned burgundy palette above. Without data-accent: burgundy. */
 html[data-accent] {
   --color-brand-50: color-mix(in srgb, var(--accent) 5%, #fff);
   --color-brand-100: color-mix(in srgb, var(--accent) 11%, #fff);
@@ -135,8 +138,9 @@ html[data-accent] {
   --color-brand-fill-hover: color-mix(in srgb, var(--accent-fill-dark, var(--accent)) 85%, #fff);
 }
 
-/* Accent-colored banner with faint diagonal lines */
+/* Accent-colored banner with faint diagonal lines; text in --hero-fg (white, dark on the yellow JavaScript banner) */
 @utility bg-hero {
+  color: var(--hero-fg);
   background-color: var(--hero-from);
   background-image:
     repeating-linear-gradient(135deg, rgba(255, 255, 255, 0.035) 0 1px, transparent 1px 14px),

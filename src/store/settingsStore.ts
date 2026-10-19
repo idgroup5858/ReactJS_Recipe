@@ -15,6 +15,8 @@ export const DEFAULT_CODE_FONT_SIZE = 14
 export interface AppSettings {
   themeMode: ThemeMode
   accentId: string
+  /** asosiy rang ochiq tilning o'z rangidan olinadi (theme/languageAccents.ts); o'chirilsa — [accentId] */
+  languageAccent: boolean
   codeFontSize: number
   wrapCodeLines: boolean
   showLineNumbers: boolean
@@ -62,6 +64,8 @@ function sanitize(raw: unknown): AppSettings {
   return {
     themeMode,
     accentId,
+    // eski sozlamalarda maydon yo'q — til rangi standart bo'yicha yoqiladi
+    languageAccent: value.languageAccent !== false,
     codeFontSize,
     wrapCodeLines: value.wrapCodeLines === true,
     showLineNumbers: value.showLineNumbers !== false,
@@ -98,7 +102,10 @@ function save(transform: (current: AppSettings) => AppSettings): void {
 
 export const setThemeMode = (themeMode: ThemeMode) => save((s) => ({ ...s, themeMode }))
 
-export const setAccent = (accentId: string) => save((s) => ({ ...s, accentId }))
+/** Palitradan rang tanlansa, til rangiga moslash o'chadi. */
+export const setAccent = (accentId: string) => save((s) => ({ ...s, accentId, languageAccent: false }))
+
+export const setLanguageAccent = (languageAccent: boolean) => save((s) => ({ ...s, languageAccent }))
 
 export const setCodeFontSize = (size: number) => save((s) => ({ ...s, codeFontSize: clampFontSize(size) }))
 

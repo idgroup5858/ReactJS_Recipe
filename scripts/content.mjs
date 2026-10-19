@@ -681,9 +681,8 @@ function cmdRebuildIndex() {
 // ---------------------------------------------------------------------------------------------------------------------
 // misollarni ishga tushirish
 
-/** Portativ Go (sessiya uchun yuklab olingan). RECIPE_GO muhit o'zgaruvchisi yoki PATH dagi `go` ustun turadi. */
-const GO_FALLBACK =
-  'C:/Users/PR2077/AppData/Local/Temp/claude/d--BACKEND-APPS-ReactJS-Recipe/7a1ec37b-1906-44dc-8be2-5994f18c7c41/scratchpad/go-dl/go/bin/go.exe'
+/** Portativ Go (go.dev/dl zip'idan ochilgan). RECIPE_GO muhit o'zgaruvchisi yoki PATH dagi `go` ustun turadi. */
+const GO_FALLBACK = 'C:/Users/iD_GROUP/sdk/go1.27.2/bin/go.exe'
 // faqat brauzer API'sidan foydalanish belgilari (oddiy so'z yoki `typeof window` emas): document., window., localStorage. ..., alert(
 const BROWSER_ONLY_RE = /\b(?:document|window|localStorage|sessionStorage|navigator)\s*[.[]|\b(?:alert|prompt|confirm)\s*\(/
 const RUN_TIMEOUT_MS = 30_000

@@ -8,7 +8,8 @@ import { RouterProvider } from 'react-router/dom'
 import { router } from './app/router'
 import { startAppearanceSync } from './theme/appearance'
 
-startAppearanceSync()
+// router state yangilanganda brauzer manzili allaqachon o'zgargan bo'ladi — til rangi yangi manzildan olinadi
+startAppearanceSync((update) => router.subscribe(update))
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
