@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:tanstack.com)",
+      "WebFetch(domain:orm.drizzle.team)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebSearch",
+      "WebFetch(domain:www.prisma.io)",
+      "WebFetch(domain:authjs.dev)",
+      "WebFetch(domain:swr.vercel.app)"
+    ]
+  }
+}

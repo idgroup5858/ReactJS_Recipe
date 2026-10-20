@@ -1,4 +1,5 @@
 import { PanelLeft, Search, Settings, Star } from 'lucide-react'
+import BackButton from './BackButton'
 import Breadcrumbs from './Breadcrumbs'
 import { HeaderButton, HeaderLink } from './HeaderButton'
 import LanguageMenu from './LanguageMenu'
@@ -6,8 +7,8 @@ import LanguageTabs from './LanguageTabs'
 import ThemeToggle from './ThemeToggle'
 
 /**
- * Yuqoridagi sticky panel (hr-ui header): chapda menyu tugmasi va joylashuv, o'rtada sozlamalarda yoqilgan tillar,
- * o'ngda amallar. Telefonda tillar uchun joy yo'q — ular o'ngdagi ochiladigan menyuda.
+ * Yuqoridagi sticky panel (hr-ui header): chapda menyu, "orqaga" tugmasi va joylashuv, o'rtada sozlamalarda yoqilgan
+ * tillar, o'ngda amallar. Telefonda tillar uchun joy yo'q — ular o'ngdagi ochiladigan menyuda.
  */
 export default function Header({ onToggleSidebar }: { onToggleSidebar: () => void }) {
   return (
@@ -18,7 +19,10 @@ export default function Header({ onToggleSidebar }: { onToggleSidebar: () => voi
         <HeaderButton label="Menyu" onClick={onToggleSidebar}>
           <PanelLeft size={18} />
         </HeaderButton>
-        <Breadcrumbs />
+        <div className="flex min-w-0 items-center gap-1.5">
+          <BackButton />
+          <Breadcrumbs />
+        </div>
       </div>
 
       <div className="hidden shrink-0 md:block">
