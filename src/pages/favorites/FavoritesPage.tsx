@@ -1,4 +1,5 @@
 import { Star } from 'lucide-react'
+import BackLink from '@/components/ui/BackLink'
 import { Card } from '@/components/ui/Card'
 import EmptyState from '@/components/ui/EmptyState'
 import LoadingState from '@/components/ui/LoadingState'
@@ -18,6 +19,7 @@ export default function FavoritesPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-5">
+      <BackLink to="/" label="Bo'limlar" history />
       <PageHeader
         title="Sevimlilar"
         description="Saqlangan misollar — barcha tillar bo'yicha"

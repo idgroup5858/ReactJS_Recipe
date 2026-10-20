@@ -1,5 +1,6 @@
 import { Info, List, SlidersHorizontal } from 'lucide-react'
 import { useSearchParams } from 'react-router'
+import BackLink from '@/components/ui/BackLink'
 import PageHeader from '@/components/ui/PageHeader'
 import SegmentedControl, { type SegmentOption } from '@/components/ui/SegmentedControl'
 import { useDocumentTitle } from '@/lib/useDocumentTitle'
@@ -23,6 +24,7 @@ export default function SettingsPage() {
 
   return (
     <div className="mx-auto max-w-3xl space-y-4">
+      <BackLink to="/" label="Bo'limlar" history />
       <PageHeader title="Sozlamalar" description="Interfeys ko'rinishini o'zingizga moslang" />
       <SegmentedControl
         label="Sozlamalar bo'limlari"

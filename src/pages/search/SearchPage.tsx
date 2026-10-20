@@ -3,6 +3,7 @@ import { useDeferredValue } from 'react'
 import { useSearchParams } from 'react-router'
 import { useContentIndex } from '@/app/routeData'
 import { SEARCH_INPUT_ID } from '@/app/useSearchShortcut'
+import BackLink from '@/components/ui/BackLink'
 import EmptyState from '@/components/ui/EmptyState'
 import LoadingState from '@/components/ui/LoadingState'
 import PageHeader from '@/components/ui/PageHeader'
@@ -30,6 +31,7 @@ export default function SearchPage() {
 
   return (
     <div className="mx-auto max-w-4xl space-y-5">
+      <BackLink to="/" label="Bo'limlar" history />
       <PageHeader
         title="Qidiruv"
         description={`${language?.name ?? ''} bo'yicha mavzular, nazariya va kodlar ichidan qidirish`}

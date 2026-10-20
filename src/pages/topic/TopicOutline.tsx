@@ -1,4 +1,4 @@
-import { BookOpen } from 'lucide-react'
+import { BookOpen, CircleCheck } from 'lucide-react'
 import { useEffect, useRef } from 'react'
 import { Link } from 'react-router'
 import { Card, CardHeader } from '@/components/ui/Card'
@@ -9,6 +9,8 @@ type Props = {
   examples: CodeExample[]
   hasTheory: boolean
   activeId: string | null
+  /** tushunarli deb belgilangan misollar — raqam o'rnida yashil belgi */
+  learnedIds: ReadonlySet<string>
 }
 
 const itemClass = 'flex items-start gap-2.5 rounded px-2.5 py-1.5 text-left text-xs leading-5 transition-colors'
@@ -17,7 +19,7 @@ const itemClass = 'flex items-start gap-2.5 rounded px-2.5 py-1.5 text-left text
  * O'ng tomondagi mundarija (keng ekranlarda): 20-50 ta misol orasida tez yurish uchun.
  * Joriy misol belgilanadi va ro'yxat o'zi unga qarab suriladi.
  */
-export default function TopicOutline({ examples, hasTheory, activeId }: Props) {
+export default function TopicOutline({ examples, hasTheory, activeId, learnedIds }: Props) {
   const listRef = useRef<HTMLElement>(null)
 
   useEffect(() => {
@@ -53,7 +55,13 @@ export default function TopicOutline({ examples, hasTheory, activeId }: Props) {
               data-outline-id={example.id}
               className={`${itemClass} ${stateClass(example.id)}`}
             >
-              <span className="w-5 shrink-0 text-right font-semibold text-neutral-400 tabular-nums">{index + 1}</span>
+              {learnedIds.has(example.id) ? (
+                <span className="flex h-5 w-5 shrink-0 items-center justify-end text-emerald-700" title="Tushunarli">
+                  <CircleCheck size={13} />
+                </span>
+              ) : (
+                <span className="w-5 shrink-0 text-right font-semibold text-neutral-400 tabular-nums">{index + 1}</span>
+              )}
               <span className="line-clamp-2 min-w-0">{example.title.replaceAll('`', '')}</span>
             </Link>
           ))}

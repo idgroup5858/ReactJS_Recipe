@@ -1,6 +1,8 @@
 import { ArrowRight } from 'lucide-react'
 import { Link } from 'react-router'
 import LanguageLogo from '@/components/ui/LanguageLogo'
+import ProgressBar from '@/components/ui/ProgressBar'
+import { type Progress, progressPercent } from '@/domain/progress'
 import type { ProgrammingLanguage } from '@/domain/types'
 import { formatCount } from '@/lib/format'
 import HeroEmblem from './HeroEmblem'
@@ -8,6 +10,8 @@ import HeroEmblem from './HeroEmblem'
 type Props = {
   language: ProgrammingLanguage
   categoryCount: number
+  /** butun til bo'yicha tushunarli deb belgilangan misollar */
+  progress: Progress
 }
 
 /**
@@ -16,7 +20,7 @@ type Props = {
  * Ranglari tilning o'z aksentidan (theme/languageAccents.ts) keladi; matn rangi `--hero-fg` — odatda oq,
  * sariq JavaScript bannerida qora.
  */
-export default function HomeHero({ language, categoryCount }: Props) {
+export default function HomeHero({ language, categoryCount, progress }: Props) {
   return (
     <div className="bg-hero relative flex items-center justify-between gap-6 overflow-hidden rounded px-6 py-7 sm:px-8 dark:ring-1 dark:ring-white/10">
       {/* tor ekranda emblema orbitalari matn ostiga kiradi — matn ustida qoladi */}
@@ -35,6 +39,17 @@ export default function HomeHero({ language, categoryCount }: Props) {
           Bo'limlar o'rganish tartibida joylashtirilgan: har bir keyingi bo'lim oldingilariga tayanadi. Har bir mavzuda avval
           nazariya, so'ng amaliy misollar va ularning natijasi beriladi.
         </p>
+        {progress.total > 0 && (
+          <div className="mt-5 max-w-sm">
+            <div className="flex items-baseline justify-between gap-3 text-xs">
+              <span className="font-semibold">O'zlashtirildi</span>
+              <span className="text-(--hero-fg)/70 tabular-nums">
+                {formatCount(progress.done)} / {formatCount(progress.total)} misol · {progressPercent(progress)}%
+              </span>
+            </div>
+            <ProgressBar progress={progress} label={`${language.name} bo'yicha o'zlashtirish`} tone="hero" className="mt-1.5" />
+          </div>
+        )}
         <Link
           to="/search"
           className="mt-5 inline-flex h-8 items-center gap-2 rounded border border-(--hero-fg)/70 px-4 text-xs font-semibold transition-colors hover:bg-(--hero-fg)/10"

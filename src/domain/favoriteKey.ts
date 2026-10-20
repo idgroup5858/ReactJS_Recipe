@@ -1,4 +1,7 @@
-/** Sevimli misolning noyob manzili. Saqlash uchun bitta satrga aylantiriladi (Android'dagi FavoriteKey bilan bir xil). */
+/**
+ * Misolning noyob manzili — sevimlilar va "tushunarli" belgilari shu kalit bilan saqlanadi.
+ * Saqlash uchun bitta satrga aylantiriladi (Android'dagi FavoriteKey bilan bir xil).
+ */
 export interface FavoriteKey {
   languageId: string
   categoryId: string

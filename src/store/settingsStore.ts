@@ -7,6 +7,9 @@ export type ThemeMode = 'system' | 'light' | 'dark'
 
 export const THEME_MODES: ThemeMode[] = ['system', 'light', 'dark']
 
+/** Bosh sahifadagi bo'limlar ko'rinishi: kartochkalar to'ri yoki ro'yxat. */
+export type CategoryLayout = 'grid' | 'list'
+
 export const MIN_CODE_FONT_SIZE = 11
 export const MAX_CODE_FONT_SIZE = 22
 export const DEFAULT_CODE_FONT_SIZE = 14
@@ -20,6 +23,7 @@ export interface AppSettings {
   codeFontSize: number
   wrapCodeLines: boolean
   showLineNumbers: boolean
+  categoryLayout: CategoryLayout
   selectedLanguageId: string
   /** tablar panelida ko'rinadigan tillar (kamida bittasi doim yoqilgan) */
   enabledLanguageIds: string[]
@@ -69,6 +73,7 @@ function sanitize(raw: unknown): AppSettings {
     codeFontSize,
     wrapCodeLines: value.wrapCodeLines === true,
     showLineNumbers: value.showLineNumbers !== false,
+    categoryLayout: value.categoryLayout === 'list' ? 'list' : 'grid',
     selectedLanguageId: selected,
     enabledLanguageIds: enabled,
     seenLanguageIds: seen ?? [],
@@ -112,6 +117,8 @@ export const setCodeFontSize = (size: number) => save((s) => ({ ...s, codeFontSi
 export const setWrapCodeLines = (wrapCodeLines: boolean) => save((s) => ({ ...s, wrapCodeLines }))
 
 export const setShowLineNumbers = (showLineNumbers: boolean) => save((s) => ({ ...s, showLineNumbers }))
+
+export const setCategoryLayout = (categoryLayout: CategoryLayout) => save((s) => ({ ...s, categoryLayout }))
 
 /** Tanlangan til tablar panelida ham yoqiladi. */
 export function selectLanguage(languageId: string): void {
