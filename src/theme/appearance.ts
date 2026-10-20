@@ -13,7 +13,7 @@ export function isDarkMode(mode: ThemeMode, systemDark: boolean = systemDarkQuer
  * bir xil). Manzil birinchi o'rinda — til almashganda rang sahifa chizilishidan oldin, LanguageScope'ni kutmasdan almashadi.
  */
 function activeLanguageId(settings: AppSettings): string {
-  return languageIdFromPath(window.location.pathname) ?? settings.selectedLanguageId
+  return languageIdFromPath(window.location.pathname, import.meta.env.BASE_URL) ?? settings.selectedLanguageId
 }
 
 // data-accent + --accent* (va banner uchun --hero-*) o'zgaruvchilari; global.css ulardan butun brand-* palitrasini hosil qiladi

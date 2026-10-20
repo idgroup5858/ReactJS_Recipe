@@ -32,8 +32,12 @@ export function getLanguageAccent(languageId: string): AccentColors | undefined 
   return Object.hasOwn(LANGUAGE_ACCENTS, languageId) ? LANGUAGE_ACCENTS[languageId] : undefined
 }
 
-/** `/:lang/...` manzilidagi til (ranglari bor bo'lsa); qidiruv, sozlamalar kabi sahifalarda — undefined. */
-export function languageIdFromPath(pathname: string): string | undefined {
-  const segment = pathname.split('/')[1] ?? ''
+/**
+ * `/:lang/...` manzilidagi til (ranglari bor bo'lsa); qidiruv, sozlamalar kabi sahifalarda — undefined.
+ * [base] — sayt ochiladigan yo'l (`/` yoki GitHub Pages'da `/ReactJS_Recipe/`), u manzil boshidan olib tashlanadi.
+ */
+export function languageIdFromPath(pathname: string, base = '/'): string | undefined {
+  const relative = pathname.startsWith(base) ? pathname.slice(base.length - 1) : pathname
+  const segment = relative.split('/')[1] ?? ''
   return getLanguageAccent(segment) ? segment : undefined
 }

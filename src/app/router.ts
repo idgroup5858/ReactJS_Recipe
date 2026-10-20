@@ -1,4 +1,4 @@
-import { createBrowserRouter } from 'react-router'
+import { createBrowserRouter, type RouteObject } from 'react-router'
 import AppLayout from '@/components/layout/AppLayout'
 import AppLoading from '@/components/layout/AppLoading'
 import LanguageScope from '@/components/layout/LanguageScope'
@@ -32,8 +32,10 @@ import { crumbsHandle } from './routeHandle'
  *   /:lang/:categoryId               → bo'lim mavzulari
  *   /:lang/:categoryId/:topicId#ex5  → mavzu (ixtiyoriy ravishda aniq misolgacha)
  *   /search?q=  /favorites  /settings?tab=
+ *
+ * Hammasi vite `base` ichida (GitHub Pages'da `/ReactJS_Recipe/...`) — loader'lardagi `redirect('/...')` ham shunga moslanadi.
  */
-export const router = createBrowserRouter([
+const routes: RouteObject[] = [
   {
     id: ROOT_ROUTE_ID,
     path: '/',
@@ -79,4 +81,6 @@ export const router = createBrowserRouter([
       { path: '*', Component: NotFoundPage, handle: crumbsHandle(() => [{ label: 'Sahifa topilmadi' }]) },
     ],
   },
-])
+]
+
+export const router = createBrowserRouter(routes, { basename: import.meta.env.BASE_URL.replace(/\/+$/, '') || '/' })
